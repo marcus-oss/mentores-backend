@@ -55,11 +55,13 @@ export class CalendlyRepository {
     const existingCalendlyInfo = await this.prisma.calendlyInfo.findFirst({
       where: {
         calendlyUserUuid,
-        mentorId,
+        mentorId: {
+          not: mentorId,
+        },
       },
     });
 
-    if (existingCalendlyInfo && existingCalendlyInfo.mentorId !== mentorId) {
+    if (existingCalendlyInfo) {
       throw new BadRequestException(
         'Não foi possível vincular esta agenda. Verifique se ela já está em uso e, se precisar, entre em contato com o suporte.',
       );
